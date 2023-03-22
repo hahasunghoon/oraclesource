@@ -107,3 +107,114 @@ SELECT DISTINCT employee_id, first_name, job_id, salary * commission_pct AS comm
 FROM employees
 WHERE commission_pct IS NOT NULL;
 
+--first_name 이 Curtis 인 사람의 first_name, last_name, email, phone_number, job_id 를 조회한다.
+-- 단, job_id의 결과는 소문자로 출력되도록 한다.
+SELECT first_name, last_name, email, phone_number, lower(job_id)
+FROM employees
+WHERE first_name = 'Curtis';
+
+--부서번호가 60,70,80,90인 사람들의  employee_id, first_name, hire_date, job_id 조회
+--단, job_id가 IT_PROG 인 사원의 경우 프로그래머로 변경한 후 출력
+SELECT employee_id, first_name, hire_date, replace(job_id,'IT_PROG','프로그래머')
+FROM employees
+WHERE department_id IN(60,70,80,90);
+
+--job_id가 AD_PRES,PU_CLERK 인 사원들의 employee_id, first_name, last_name, deapartment_id, job_id를 조회한다
+--단 사원명은 first_name과 last_name을 연결하여 출력하시오
+SELECT employee_id, concat(first_name,concat(' ',last_name)), deapartment_id, job_id
+FROM employees
+WHERE job_id IN('AD_PRES','PU_CLERK');
+
+--[실습] 부서 80의 각 사원에 대해 적용 가능한 세율을 표시하시오.
+SELECT
+    last_name,
+    salary,
+    decode(trunc(salary / 2000.0),
+           0,
+           0.00,
+           1,
+           0.09,
+           2,
+           0.20,
+           3,
+           0.30,
+           4,
+           0.40,
+           5,
+           0.43,
+           6,
+           0.44,
+           0.45) AS tax_rate
+FROM
+    employees
+WHERE department_id = 80;
+
+--회사 내의 최대 연봉 및 최소 연봉의 차이를 출력
+SELECT MAX(salary) - MIN(salary) as sal_gap
+FROM employees;
+-- 매니저로 근무하는 사원들의 총 숫자 출력(매니저 중복제거)
+SELECT COUNT(distinct manager_id)
+FROM employees;
+
+--join
+--자신의 담당 매니저의 고용일보다 빠른 입사자 찾기(self join - employees)
+--hire_date, last_name, mannager_id 조회
+SELECT e1.hire_date, e1.last_name, e1.manager_id
+FROM employees e1, employees e2
+WHERE e1.manager_id = e2.employee_id AND e1.hire_date < e2.hire_date;
+
+--도시 이름이 T로 시작하는 지역에 사는 사원들의 사번, last_name, 부서번호, 도시 조회
+--employees, departments, locations, inner join
+SELECT e.employee_id, e.last_name, d.department_id, l.city
+FROM employees e, departments d, locations l
+WHERE e.department_id = d.department_id AND d.location_id = l.location_id AND l.city LIKE 'T%'; 
+
+--위치 id가 1700인 사원들의 사번, last_name, 부서번호, 급여 조회
+--employees, departments, inner join
+SELECT e.employee_id, e.last_name, d.department_id, e.salary
+FROM employees e, departments d
+WHERE e.department_id = d.department_id AND d.location_id =1700;
+
+--부서명, 위치id, 각 부서별 사원 총 수, 각 부서별 평균연봉 조회
+-- 평균 연봉은 소수점 2자리까지만
+--employees, departments, inner join
+SELECT d.department_name,d.location_id, count(e.employee_id),round(avg(e.salary),2)
+FROM employees e, departments d
+WHERE e.department_id = d.department_id
+GROUP BY d.department_name, d.location_id;
+
+--EXecutive 부서에 근무하는 사원들의 부서번호, last_name, job_id 조회
+--employees, departments, inner join
+SELECT d.department_id, e.last_name, e.job_id
+FROM employees e, departments d
+WHERE e.department_id = d.department_id AND d.department_name = 'EXecutive';
+
+--각 사원별 소속부서에서 자신보다 늦게 고용되었으나 보다 많은 연봉을 받는 사원이 존재하는 모든 사원들의
+--부서번호,이름(first_name과 last_name 연결하기), salary, hire_date조회
+--employees self join
+SELECT distinct e1.department_id, e1.first_name || ' ' ||e1.last_name as name, e1.salary, e1.hire_date
+FROM employees e1, employees e2
+WHERE e1.department_id = e2.department_id AND e1.hire_date < e2.hire_date AND e1.salary < e2.salary;
+
+-- 서브쿼리
+-- LAST_NAME 에 u가 포함된 사원들과 동일 부서에 근무하는 사원들의 사번, last_name 조회
+
+
+-- job_id 가 SA_MAN 인 사원들의 최대 연봉보다 높게 받는 사원들의 last_name, job_id, salary 조회
+
+
+-- 커미션을 버는 사원들의 부서와 연봉이 동일한 사원들의 last_name, department_id, salary 조회
+
+
+-- 회사 전체 평균 연봉보다 더 받는 사원들 중 last_name에 u가 있는 사원들이 근무하는 부서에서
+-- 근무하는 사원들의 employee_id, last_name, salary 조회
+
+
+-- last_name 이 Davies 인 사람보다 나중에 고용된 사원들의 last_name, hire_date 조회
+
+
+-- last_name이 King 인 사원을 매니저로 두고 있는 모든 사원들의 last_name, salary 조회
+
+
+
+
