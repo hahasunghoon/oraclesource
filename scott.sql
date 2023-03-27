@@ -2176,7 +2176,7 @@ INSERT INTO table_unique (
 );
 
 -- login_id 가 중복된 상황일 때 : unique 위배
--- 무결성 제약 조건(SCOTT.SYS_C008364)에 위배됩니다
+-- 무결성 제약 조건(SCOTT.SYS_C008364)에 위배됩니다★★★(자주뜸)
 INSERT INTO table_unique (
     login_id,
     login_pwd,
@@ -2195,7 +2195,7 @@ FROM
 -- 테이블 생성 제약조건 지정, 변경, 삭제 not null 형태와 동일함
 
 
---3) PRIMARY KEY(PK) : UNIQUE + NOT NULL
+--3)★★ PRIMARY KEY(PK) : UNIQUE + NOT NULL
 CREATE TABLE table_primary (
     login_id  VARCHAR2(20) PRIMARY KEY,
     login_pwd VARCHAR2(20) NOT NULL,
@@ -2296,7 +2296,7 @@ INSERT INTO TABLE_CHECK VALUES('TEST','123','010-1234-5678');
 INSERT INTO TABLE_CHECK VALUES('TEST','1234','010-1234-5678');
 
 
--- 6) DEFAULT : 기본값 지정
+-- 6)★★ DEFAULT : 기본값 지정
 CREATE TABLE table_default (
     login_id  VARCHAR2(20) PRIMARY KEY,
     login_pwd VARCHAR2(20) DEFAULT '1234',
