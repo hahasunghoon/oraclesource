@@ -64,4 +64,32 @@ order_id number(8) PRIMARY KEY,
 user_id number(4) not null REFERENCES suser(user_id),
 product_id number(8) not null REFERENCES product(product_id));
 
+ALTER TABLE sorder ADD order_date DATE; --구매날짜
+
 CREATE SEQUENCE order_seq;
+
+--INSERT INTO sorder VALUES(order_seq.nextval, 물건을 구매한id, 상품id, sysdate);
+
+--user_id, name, pay_no, info
+--suser와 paytype join
+SELECT u.user_id, u.name, u.pay_no, p.info
+FROM suser u, paytype p
+WHERE u.pay_no=p.pay_no AND u.user_id=1000;
+--주문정보 전체 조회
+SELECT * FROM sorder;
+
+--주문목록 조회
+--user_id, name, card/cash, product_id, pname, price, content
+
+--기준 : sorder
+--suser 테이블 : name,
+--paytype 테이블 : card/cash
+--product 테이블 : product_id, pname, price, content
+
+--홍길동 주문목록 조회
+SELECT s.user_id, u.name, t.info, s.product_id, p.pname, p.price, p.content, s.order_date
+FROM sorder s, suser u, paytype t, product p
+WHERE s.user_id=u.user_id AND u.pay_no=t.pay_no AND s.product_id=p.product_id AND s.user_id=1000;
+
+
+
